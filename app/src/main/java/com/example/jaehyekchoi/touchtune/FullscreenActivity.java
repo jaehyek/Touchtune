@@ -5,8 +5,10 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -26,6 +28,8 @@ public class FullscreenActivity extends AppCompatActivity
      */
     private static final int AUTO_HIDE_DELAY_MILLIS = 3000;
 
+    private  static final String tag = "Touchtune" ;
+
     /**
      * Some older devices needs a small delay between UI widget updates
      * and a change of the status and navigation bar.
@@ -33,6 +37,10 @@ public class FullscreenActivity extends AppCompatActivity
     private static final int UI_ANIMATION_DELAY = 300;
     private final Handler mHideHandler = new Handler();
     private View mContentView;
+
+    private TextView mCoordi_x;
+    private TextView mCoordi_y;
+
     private final Runnable mHidePart2Runnable = new Runnable()
     {
         @SuppressLint("InlinedApi")
@@ -94,6 +102,35 @@ public class FullscreenActivity extends AppCompatActivity
         }
     };
 
+    private final Runnable mHideCoordi = new Runnable()
+    {
+        @Override
+        public void run()
+        {
+            // Delayed display of UI elements
+            mControlsView.setVisibility(View.GONE);
+        }
+    };
+
+    private final View.OnTouchListener mContentviewTouchListener = new View.OnTouchListener()
+    {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent)
+        {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN)
+            {
+                //mControlsView.setVisibility(view.VISIBLE);
+
+                mCoordi_x.setText( String.valueOf(Math.round(motionEvent.getRawX())) );
+                mCoordi_y.setText( String.valueOf(Math.round(motionEvent.getRawY())) );
+
+                //mHideHandler.removeCallbacks(mHideCoordi);
+                //mHideHandler.postDelayed(mHideCoordi, 3000);
+            }
+            return true;
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -116,10 +153,25 @@ public class FullscreenActivity extends AppCompatActivity
             }
         });
 
+        mContentView.setOnTouchListener(mContentviewTouchListener);
+
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
-        findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
+        //findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
+
+        mCoordi_x = (TextView)findViewById(R.id.coordi_x) ;
+        mCoordi_y = (TextView)findViewById(R.id.coordi_y) ;
+
+        mCoordi_x.setOnTouchListener(new View.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(View v, MotionEvent event)
+            {
+                toggle();
+                return false;
+            }
+        });
     }
 
     @Override
@@ -131,6 +183,8 @@ public class FullscreenActivity extends AppCompatActivity
         // created, to briefly hint to the user that UI controls
         // are available.
         delayedHide(100);
+//        mContentView.setVisibility(View.GONE);
+//        mControlsView.setVisibility(View.VISIBLE);
     }
 
     private void toggle()
@@ -152,7 +206,7 @@ public class FullscreenActivity extends AppCompatActivity
         {
             actionBar.hide();
         }
-        mControlsView.setVisibility(View.GONE);
+        //mControlsView.setVisibility(View.GONE);
         mVisible = false;
 
         // Schedule a runnable to remove the status and navigation bar after a delay

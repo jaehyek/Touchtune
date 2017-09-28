@@ -112,6 +112,9 @@ public class FullscreenActivity extends AppCompatActivity
         }
     };
 
+    final Handler handler = new Handler();
+    private long starttime = 0  ;
+
     private final View.OnTouchListener mContentviewTouchListener = new View.OnTouchListener()
     {
         @Override
@@ -126,6 +129,23 @@ public class FullscreenActivity extends AppCompatActivity
 
                 //mHideHandler.removeCallbacks(mHideCoordi);
                 //mHideHandler.postDelayed(mHideCoordi, 3000);
+
+                starttime = System.currentTimeMillis();
+
+                handler.postDelayed(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        long millis = System.currentTimeMillis() - starttime;
+                        if ( millis > 1000)
+                        {
+                            mCoordi_x.setText("Width");
+                            mCoordi_y.setText("Height");
+                        }
+                    }
+                }, 2000);
+
             }
             return true;
         }

@@ -28,8 +28,8 @@
         <LinearLayout
             android:id="@+id/fullscreen_content_controls"
             style="?metaButtonBarStyle"
-            android:layout_width="match_parent"
-            android:layout_height="33dp"
+            android:layout_width="100dp"
+            android:layout_height="12dp"
             android:layout_gravity="bottom|center_horizontal"
             android:background="@color/black_overlay"
             android:orientation="horizontal"
@@ -42,7 +42,7 @@
                 android:layout_weight="1"
                 android:text="width"
                 android:textAlignment="center"
-                android:textSize="24sp"/>
+                android:textSize="10sp"/>
 
             <TextView
                 android:id="@+id/coordi_y"
@@ -51,7 +51,7 @@
                 android:layout_weight="1"
                 android:text="height"
                 android:textAlignment="center"
-                android:textSize="24sp"/>
+                android:textSize="10sp"/>
 
         </LinearLayout>
     </FrameLayout>
